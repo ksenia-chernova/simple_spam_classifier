@@ -21,6 +21,9 @@ python main.py
 python predict.py
 ```
 
+### Пример использования
+<img width="1090" height="229" alt="image" src="https://github.com/user-attachments/assets/6cd3df9b-af8b-4dbd-89fb-2489c73421ed" />
+
 ### Ссылки
 1. [Hugging Face Transformers](https://huggingface.co/docs/transformers/index)
 2. [Datasets Library](https://huggingface.co/docs/datasets/index)
