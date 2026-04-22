@@ -9,14 +9,7 @@ import shutil
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
-old_ds = load_dataset("DmitryKRX/anti_spam_ru")['train']
-new_ds = load_dataset("benzlokzik/russian-spam-fork")['train']
-new_ds = new_ds.rename_column("label", "is_spam")
-new_ds = new_ds.cast_column("is_spam", Value("int64"))
-
-spam_only = new_ds.filter(lambda x: x["is_spam"] == 1)
-
-ds = concatenate_datasets([old_ds, spam_only])
+ds = load_dataset("DmitryKRX/anti_spam_ru")['train']
 
 ds = ds.train_test_split(test_size=0.2, seed=42)
 train_dataset = ds['train']

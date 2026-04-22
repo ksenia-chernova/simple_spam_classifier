@@ -3,7 +3,7 @@ import torch
 import shap
 import numpy as np
 
-model_path = "./final_spam_model_v3.0"
+model_path = "./final_spam_model"
 model = AutoModelForSequenceClassification.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
