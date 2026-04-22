@@ -1,31 +1,84 @@
-# Simple Spam Classifier - Простой классификатор спама в SMS/Email
+# Классификатор спам-сообщений с SHAP-объяснениями
 
-Простой классификатор спама на русском языке, построенный на основе трансформерной модели BERT. Пет-проект для изучения NLP и машинного обучения.
-Проект представляет собой модель бинарной классификации текстовых сообщений на спам и не спам. Модель обучена на русскоязычном датасете и использует предобученную модель rubert-tiny2 для достижения высокого качества при минимальных требованиях к вычислительным ресурсам.
+## Описание
 
-### Установка
-1. Склонируйте данный репозиторий
+Проект реализует классификатор спам-сообщений на русском языке на основе трансформерной модели `cointegrated/rubert-tiny2`. Модель определяет, является ли текстовое сообщение спамом, и предоставляет объяснение принятого решения с помощью SHAP (SHapley Additive exPlanations).
+
+## Функциональность
+
+- Бинарная классификация текстовых сообщений (спам / не спам)
+- Интерпретация предсказаний с выделением ключевых слов
+- Два режима объяснения: подробный (с визуализацией) и быстрый (только текст)
+- Интерактивный режим работы через командную строку
+
+## Установка
+
 ```bash
-git clone git@github.com:ksenia-chernova/simple_spam_classifier.git
+pip install torch transformers datasets scikit-learn shap numpy
 ```
-2. Установите зависимости
-```bash
-pip install datasets transformers scikit-learn torch accelerate evaluate
-```
-3. Запустите файл для обучения модели
+
+## Использование
+
+### Обучение модели
+
 ```bash
 python main.py
 ```
-4. Запустите файл для работы с обученной моделью
+
+После обучения модель сохраняется в директорию `./final_spam_model` и автоматически архивируется в `final_spam_model.zip`.
+
+### Интерактивный режим с объяснениями
+
 ```bash
 python predict.py
 ```
 
-### Пример использования
-<img width="1090" height="229" alt="image" src="https://github.com/user-attachments/assets/6cd3df9b-af8b-4dbd-89fb-2489c73421ed" />
+Доступные команды:
+- Обычный ввод текста — только предсказание
+- `explain текст` — подробное объяснение с визуализацией SHAP
+- `simple текст` — быстрое объяснение с выводом ключевых слов
+- `exit` или `quit` — выход из программы
 
-### Ссылки
-1. [Hugging Face Transformers](https://huggingface.co/docs/transformers/index)
-2. [Datasets Library](https://huggingface.co/docs/datasets/index)
-3. [rubert-tiny2 модель](https://huggingface.co/cointegrated/rubert-tiny2?spm=a2ty_o01.29997173.0.0.74fe5171r5Y7r5)
-4. [Датасет anti_spam_ru](https://huggingface.co/datasets/DmitryKRX/anti_spam_ru?spm=a2ty_o01.29997173.0.0.74fe5171r5Y7r5)
+### Пример вывода
+
+<img width="1662" height="403" alt="image" src="https://github.com/user-attachments/assets/7d578c3f-914c-4c2e-a58c-3656efaa39ee" />
+
+
+## Структура проекта
+
+- `main.py` — скрипт для обучения модели на датасетах `DmitryKRX/anti_spam_ru` и `benzlokzik/russian-spam-fork`
+- `predict.py` — скрипт для интерактивного использования обученной модели с SHAP-объяснениями
+- `final_spam_model/` — директория с сохраненной моделью и токенизатором
+
+## Используемые датасеты
+
+- [DmitryKRX/anti_spam_ru](https://huggingface.co/datasets/DmitryKRX/anti_spam_ru)
+
+## Модель
+
+Базовая модель: `cointegrated/rubert-tiny2` — компактный BERT для русского языка.
+
+Параметры обучения:
+- Количество эпох: 2
+- Learning rate: 2e-5
+- Batch size: 32 (GPU) / 8 (CPU)
+- Максимальная длина текста: 128 токенов
+- Weight decay: 0.02
+
+## Метрики качества
+
+В ходе обучения оцениваются:
+- Accuracy
+- F1-score
+- Precision
+- Recall
+
+Лучшая модель сохраняется по метрике F1.
+
+## Требования
+
+- Python 3.8+
+- PyTorch 1.10+
+- Transformers 4.20+
+- SHAP 0.42+
+- Доступ к GPU рекомендуется для обучения
